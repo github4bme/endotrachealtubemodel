@@ -1,0 +1,5 @@
+train: ./training/images
+val: ./validation/images
+
+nc: 2
+names: ['next', 'close_wall']
