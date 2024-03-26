@@ -38,6 +38,9 @@ class AimingState(AbstractState):
 
 
 class MovingState(AbstractState):
+    currentDistance = 0
+    goalDistance = 0
+
     def ManualOverride(self):
         return ManualState()
 
@@ -48,6 +51,9 @@ class MovingState(AbstractState):
 
 
 class RetractingState(AbstractState):
+    currentDistance = 0
+    goalDistance = 0
+
     def ManualOverride(self):
         return ManualState()
 
