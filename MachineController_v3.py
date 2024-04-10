@@ -1,5 +1,4 @@
 from IntegrationClasses import *
-from dark_filter import *
 from ultralytics import YOLO
 from ultralytics.utils.plotting import Annotator
 from gpiozero import DigitalOutputDevice, Servo
@@ -21,7 +20,7 @@ def start_execution():
     cap.set(4, 480)  # set Height
     lastFrameTime = None
 
-    state = EvaluatingAnatomyState(None, 0.1, 1, 0.1, cap, model, servo2, servo1)
+    state = EvaluatingAnatomyState(None, 0.2, 1, 0.1, cap, model, servo2, servo1)
 
     while (True):
         currentTime = time.time()

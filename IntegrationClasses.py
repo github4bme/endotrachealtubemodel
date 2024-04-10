@@ -81,9 +81,9 @@ class EvaluatingAnatomyState(AbstractState):
                 stepX = self.increment * -1.0
 
             if centerY > 0.5 + self.goalWindowWidth:
-                stepY = self.increment
-            elif centerY < 0.5 - self.goalWindowWidth:
                 stepY = self.increment * -1.0
+            elif centerY < 0.5 - self.goalWindowWidth:
+                stepY = self.increment
 
             targetX = self.currentServoX + stepX
             if targetX >= 1.0:
