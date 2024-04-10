@@ -12,6 +12,7 @@ class AbstractState(ABC):
     currentServoY = 0
     increment = 0
     waitTime = 0
+    goalWindowWidth = 0
     camera = None
     model = None
     xServo = None
@@ -33,6 +34,7 @@ class EvaluatingAnatomyState(AbstractState):
             self.currentServoY = oldState.currentServoY
             self.increment = oldState.increment
             self.waitTime = oldState.waitTime
+            self.goalWindowWidth = oldState.goalWindowWidth
             self.camera = oldState.camera
             self.model = oldState.model
             self.xServo = oldState.xServo
@@ -73,14 +75,14 @@ class EvaluatingAnatomyState(AbstractState):
             stepX = 0
             stepY = 0
 
-            if centerX > 0.5 - self.goalWindowWidth:
+            if centerX > 0.5 + self.goalWindowWidth:
                 stepX = self.increment
-            elif centerX < 0.5 + self.goalWindowWidth:
+            elif centerX < 0.5 - self.goalWindowWidth:
                 stepX = self.increment * -1.0
 
-            if centerY > 0.5 - self.goalWindowWidth:
+            if centerY > 0.5 + self.goalWindowWidth:
                 stepY = self.increment
-            elif centerY < 0.5 + self.goalWindowWidth:
+            elif centerY < 0.5 - self.goalWindowWidth:
                 stepY = self.increment * -1.0
 
             targetX = self.currentServoX + stepX
@@ -109,8 +111,11 @@ class AimingState(AbstractState):
         self.currentServoY = oldState.currentServoY
         self.increment = oldState.increment
         self.waitTime = oldState.waitTime
+        self.goalWindowWidth = oldState.goalWindowWidth
         self.camera = oldState.camera
         self.model = oldState.model
+        self.xServo = oldState.xServo
+        self.yServo = oldState.yServo
 
         self.goalServoX = targetX
         self.goalServoY = targetY
