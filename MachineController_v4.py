@@ -24,7 +24,7 @@ def start_execution():
     cap.set(4, 480)  # set Height
     lastFrameTime = None
 
-    state = EvaluatingAnatomyState(None, 5, 0, 0.15, cap, model, servo1, servo2)
+    state = EvaluatingAnatomyState(None, 3, 0, 0.15, cap, model, servo1, servo2)
 
     while (True):
         currentTime = time.time()
@@ -38,6 +38,6 @@ def start_execution():
 
         k = cv2.waitKey(30) & 0xff
         if k == 27:  # press 'ESC' to quit
-            break
+            state = state.ManualOverride()
 
 start_execution()

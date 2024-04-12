@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from ultralytics import YOLO
 from ultralytics.utils.plotting import Annotator
 from time import sleep
+import pygame
 import cv2
 
 # MAJOR QUESTION: How does the BME handle their loop of controlling the motors?
@@ -54,13 +55,13 @@ class EvaluatingAnatomyState(AbstractState):
             self.iterations = 0
 
     def ManualOverride(self):
-        return ManualState()
+        return ManualState(self)
 
     def Execute(self, deltaTime):
         # LOGIC HERE WILL EVALUATE CAMERA FEED AND RETURN AN AIMING STATE
         ret, frame = self.camera.read()
 
-        results = self.model.predict(frame, verbose=False, imgsz=320)
+        results = self.model.predict(frame, verbose=True, imgsz=352)
         for r in results:
             annotator = Annotator(frame)
 
@@ -82,17 +83,25 @@ class EvaluatingAnatomyState(AbstractState):
             stepX = 0
             stepY = 0
 
-            if centerX > 0.5 + self.goalWindowWidth:
+            if centerX > 0.6 + self.goalWindowWidth:
                 stepX = self.increment
-            elif centerX < 0.5 - self.goalWindowWidth:
+            elif centerX < 0.4 - self.goalWindowWidth:
                 stepX = self.increment * -1.0
-            else:
-                print("MIDDLE")
+            elif centerX > 0.5 + self.goalWindowWidth:
+                stepX = self.increment * 0.5 
+            elif centerX < 0.5 - self.goalWindowWidth:
+                stepX = self.increment * 0.5 * -1.0
 
-            if centerY > 0.5 + self.goalWindowWidth:
+            if centerY > 0.6 + self.goalWindowWidth:
                 stepY = self.increment * -1.0
-            elif centerY < 0.5 - self.goalWindowWidth:
+            elif centerY < 0.4 - self.goalWindowWidth:
                 stepY = self.increment
+            elif centerY > 0.5 + self.goalWindowWidth:
+                stepY = self.increment * 0.5 * -1.0 
+            elif centerY < 0.5 - self.goalWindowWidth:
+                stepY = self.increment * 0.5
+
+
 
             targetX = self.currentServoX + stepX
             if targetX >= 180:
@@ -132,11 +141,13 @@ class AimingState(AbstractState):
         self.goalServoY = targetY
 
     def ManualOverride(self):
-        return ManualState()
+        return ManualState(self)
 
     def Execute(self, deltaTime):
         if self.iterations % 3 != 0 or True:
-            self.xServo.angle = self.goalServoX
+            self.xSefrom adafruit_servokit import ServoKit
+import board
+from adafruit_pca9685 import PCA9685rvo.angle = self.goalServoX
             self.yServo.angle = self.goalServoY
         self.iterations += 1
         sleep(self.waitTime)
@@ -148,7 +159,7 @@ class MovingState(AbstractState):
     goalDistance = 0
 
     def ManualOverride(self):
-        return ManualState()
+        return ManualState(self)
 
     def Execute(self, deltaTime):
         # LOGIC HERE WILL MOVE THE LINEAR ACTUATOR FURTHER DOWN THE THROAT A SPECIFIED DISTANCE,
@@ -161,7 +172,7 @@ class RetractingState(AbstractState):
     goalDistance = 0
 
     def ManualOverride(self):
-        return ManualState()
+        return ManualState(self)
 
     def Execute(self, deltaTime):
         # LOGIC HERE WILL MOVE THE LINEAR ACTUATOR OUT OF THE THROAT A SPECIFIED DISTANCE,
@@ -170,9 +181,64 @@ class RetractingState(AbstractState):
 
 
 class ManualState(AbstractState):
+    def __init__(self, oldState):
+        self.currentServoX = oldState.currentServoX
+        self.currentServoY = oldState.currentServoY
+        self.increment = oldState.increment
+        self.waitTime = oldState.waitTime
+        self.goalWindowWidth = oldState.goalWindowWidth
+        self.camera = oldState.camera
+        self.model = oldState.model
+        self.xServo = oldState.xServo
+        self.yServo = oldState.yServo
+        self.iterations = oldState.iterations
+        
+        pygame.init()
+    
     def ManualOverride(self):
         return self
 
     def Execute(self, deltaTime):
-        # LOGIC HERE WILL CONTROL THE LINEAR ACTUATOR AND MOTORS BASED OFF OF USER INPUT
+        stepX = 0
+        stepY = 0
+        
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    stepY = self.increment
+                elif event.key == pygame.K_w:
+                    stepY = self.increment * -1.0
+                elif event.key == pygame.K_a:
+                    stepX = self.increment
+                elif event.key == pygame.K_d:
+                    stepX = self.increment * -1.0
+                elif event.key == pygame.K_e:
+                    pass
+                    #return_servo1()
+                elif event.key == pygame.K_q:
+                    pass
+                    #return_servo2()
+                elif event.key == pygame.K_UP:
+                    pass
+                    #stepper_key_up_pressed = True
+                elif event.key == pygame.K_DOWN:
+                    pass
+                    #stepper_key_down_pressed = True
+                
+        targetX = self.currentServoX + stepX
+        if targetX >= 180:
+            targetX = 180
+        elif targetX <= 0:
+            targetX = 0
+
+        targetY = self.currentServoY + stepY
+        if targetY >= 180:
+            targetY = 180
+        elif targetY <= 0:
+            targetY = 0
+        self.currentServoX = targetX
+        self.currentServoY = targetY
+        self.xServo.angle = targetX
+        self.yServo.angle = targetY
+        sleep(self.waitTime)
         return self
