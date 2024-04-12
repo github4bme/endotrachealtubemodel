@@ -4,10 +4,9 @@ from ultralytics.utils.plotting import Annotator
 from time import sleep
 import cv2
 
-# MAJOR QUESTION: How does the BME handle their loop of controlling the motors?
-# Do we need to make our own timed frame-by-frame loop?
-
+# abstract class each state will implement
 class AbstractState(ABC):
+    # these are all variables that must persist when updating
     currentServoX = 0
     currentServoY = 0
     increment = 0
@@ -30,6 +29,7 @@ class AbstractState(ABC):
 class EvaluatingAnatomyState(AbstractState):
     def __init__(self, oldState=None, increment=None, waitTime=None, goalWindowWidth = None,camera=None, model=None, xServo=None, yServo=None):
         if oldState is not None:
+            # transfer all variables that must be retained when switching states
             self.currentServoX = oldState.currentServoX
             self.currentServoY = oldState.currentServoY
             self.increment = oldState.increment
@@ -40,6 +40,7 @@ class EvaluatingAnatomyState(AbstractState):
             self.xServo = oldState.xServo
             self.yServo = oldState.yServo
         else:
+            # instantiate a new state for machine startup
             self.currentServoX = 0.0
             self.currentServoY = 0.0
             self.increment = increment
@@ -54,10 +55,13 @@ class EvaluatingAnatomyState(AbstractState):
         return ManualState()
 
     def Execute(self, deltaTime):
-        # LOGIC HERE WILL EVALUATE CAMERA FEED AND RETURN AN AIMING STATE
+        # read in most recent camera frame
         ret, frame = self.camera.read()
 
+        # use model to detect anatomy in frame
         results = self.model.predict(frame, verbose=True, imgsz=288)
+
+        # annotate and display the frame with the detected bounding boxes
         for r in results:
             annotator = Annotator(frame)
 
@@ -68,6 +72,8 @@ class EvaluatingAnatomyState(AbstractState):
                 annotator.box_label(b, self.model.names[int(c)] + " " + str(box.conf))
         cv2.imshow('frame', annotator.result())
 
+        # get the normalized bounding box locations to analyze positions within frame
+        # there is not yet a check for which type of anatomy is found, we just react to any found
         normBoxes = results[0].boxes.xywhn
         if len(normBoxes) > 0:
             centerX = normBoxes[0][0]
@@ -75,6 +81,7 @@ class EvaluatingAnatomyState(AbstractState):
             stepX = 0
             stepY = 0
 
+            # add increment to occur if boundign box is far enough away from the center of the frame
             if centerX > 0.5 + self.goalWindowWidth:
                 stepX = self.increment
             elif centerX < 0.5 - self.goalWindowWidth:
@@ -85,6 +92,7 @@ class EvaluatingAnatomyState(AbstractState):
             elif centerY < 0.5 - self.goalWindowWidth:
                 stepY = self.increment
 
+            # put bounds on the servo values being set (cannot exceed |1|)
             targetX = self.currentServoX + stepX
             if targetX >= 1.0:
                 targetX = 1.0
@@ -98,8 +106,8 @@ class EvaluatingAnatomyState(AbstractState):
                 targetY = -1.0
 
             return AimingState(self, targetX, targetY)
-
-        return AimingState(self, self.currentServoX, self.currentServoY)
+        else:
+            return AimingState(self, self.currentServoX, self.currentServoY)
 
 
 class AimingState(AbstractState):
@@ -107,6 +115,7 @@ class AimingState(AbstractState):
     goalServoY = 0
 
     def __init__(self, oldState, targetX, targetY):
+        # transfer all variables that must be retained when switching states
         self.currentServoX = oldState.currentServoX
         self.currentServoY = oldState.currentServoY
         self.increment = oldState.increment
@@ -124,6 +133,7 @@ class AimingState(AbstractState):
         return ManualState()
 
     def Execute(self, deltaTime):
+        # set servo values, then wait to let servos move and to reduce constant jittering
         self.xServo.value = self.goalServoX
         self.yServo.value = self.goalServoY
         sleep(self.waitTime)
