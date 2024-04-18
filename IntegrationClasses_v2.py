@@ -5,10 +5,10 @@ from time import sleep
 import pygame
 import cv2
 
-# MAJOR QUESTION: How does the BME handle their loop of controlling the motors?
-# Do we need to make our own timed frame-by-frame loop?
-
+# abstract class each state will implement
 class AbstractState(ABC):
+    # these are all variables that must persist when updating
+    # these are default values, not used (see constructor)
     currentServoX = 90
     currentServoY = 90
     increment = 1
@@ -32,6 +32,7 @@ class AbstractState(ABC):
 class EvaluatingAnatomyState(AbstractState):
     def __init__(self, oldState=None, increment=None, waitTime=None, goalWindowWidth = None,camera=None, model=None, xServo=None, yServo=None):
         if oldState is not None:
+            # transfer all variables that must be retained when switching states
             self.currentServoX = oldState.currentServoX
             self.currentServoY = oldState.currentServoY
             self.increment = oldState.increment
@@ -43,6 +44,7 @@ class EvaluatingAnatomyState(AbstractState):
             self.yServo = oldState.yServo
             self.iterations = oldState.iterations
         else:
+            # instantiate a new state for machine startup
             self.currentServoX = 90
             self.currentServoY = 90
             self.increment = increment
@@ -57,11 +59,16 @@ class EvaluatingAnatomyState(AbstractState):
     def ManualOverride(self):
         return ManualState(self)
 
+    # for the anatomy evaluation state, it will gather camera input, detect anatomy, and determine direction to
+    # move based on bounding box locations of detected anatomy
     def Execute(self, deltaTime):
-        # LOGIC HERE WILL EVALUATE CAMERA FEED AND RETURN AN AIMING STATE
+        # read in most recent camera frame
         ret, frame = self.camera.read()
 
+        # use model to detect anatomy in frame
         results = self.model.predict(frame, verbose=True, imgsz=352)
+
+        # annotate and display the frame with the detected bounding boxes
         for r in results:
             annotator = Annotator(frame)
 
@@ -72,6 +79,9 @@ class EvaluatingAnatomyState(AbstractState):
                 annotator.box_label(b, self.model.names[int(c)] + " " + str(box.conf))
         cv2.imshow('frame', annotator.result())
 
+        # get the normalized bounding box locations to analyze anatomy positions during frame
+        # currently only reacts to tracheas (box.cls == 0)
+        # trachea=0, epiglottis=1, uvula=2
         normBox = None
         for box in results[0].boxes:
             if box.cls == 0:
@@ -83,6 +93,9 @@ class EvaluatingAnatomyState(AbstractState):
             stepX = 0
             stepY = 0
 
+            # add increment to occur if bounding box is far enough away from the center of the frame
+            # note that increment is scaled down if the box is near the center
+            # this was the last thing we did before the semester ended, so these values are just hardcoded
             if centerX > 0.6 + self.goalWindowWidth:
                 stepX = self.increment
             elif centerX < 0.4 - self.goalWindowWidth:
@@ -101,8 +114,7 @@ class EvaluatingAnatomyState(AbstractState):
             elif centerY < 0.5 - self.goalWindowWidth:
                 stepY = self.increment * 0.5
 
-
-
+            # put bounds on the servo angles being set (must be between 0 and 180)
             targetX = self.currentServoX + stepX
             if targetX >= 180:
                 targetX = 180
@@ -120,12 +132,14 @@ class EvaluatingAnatomyState(AbstractState):
 
         return AimingState(self, self.currentServoX, self.currentServoY)
 
-
+# this state takes in a target x and y position for the respective servos and sets the value, then waits for the
+# determined waiting period before action increments
 class AimingState(AbstractState):
     goalServoX = 0
     goalServoY = 0
 
     def __init__(self, oldState, targetX, targetY):
+        # transfer all variables that must be retained when switching states
         self.currentServoX = oldState.currentServoX
         self.currentServoY = oldState.currentServoY
         self.increment = oldState.increment
@@ -144,14 +158,14 @@ class AimingState(AbstractState):
         return ManualState(self)
 
     def Execute(self, deltaTime):
-        if self.iterations % 3 != 0 or True:
-            self.xServo.angle = self.goalServoX
-            self.yServo.angle = self.goalServoY
-        self.iterations += 1
+        self.xServo.angle = self.goalServoX
+        self.yServo.angle = self.goalServoY
         sleep(self.waitTime)
         return EvaluatingAnatomyState(self)
 
-
+# UNCOMPLETED
+# this state is meant to control the linear actuator and move the device further down the throat.
+# intended to be called once the machine is aimed correctly based on the anatomy it has detected
 class MovingState(AbstractState):
     currentDistance = 0
     goalDistance = 0
@@ -161,10 +175,11 @@ class MovingState(AbstractState):
 
     def Execute(self, deltaTime):
         # LOGIC HERE WILL MOVE THE LINEAR ACTUATOR FURTHER DOWN THE THROAT A SPECIFIED DISTANCE,
-        # THEN RETURN AND EvaluatingAnatomyState
+        # THEN RETURN AN EvaluatingAnatomyState
         return EvaluatingAnatomyState()
 
-
+# UNCOMPLETED
+# meant to control the linear actuator out of the throat in the case something goes wrong (opposite of MovingState)
 class RetractingState(AbstractState):
     currentDistance = 0
     goalDistance = 0
@@ -174,10 +189,12 @@ class RetractingState(AbstractState):
 
     def Execute(self, deltaTime):
         # LOGIC HERE WILL MOVE THE LINEAR ACTUATOR OUT OF THE THROAT A SPECIFIED DISTANCE,
-        # THEN RETURN AND EvaluatingAnatomyState
+        # THEN RETURN AN EvaluatingAnatomyState
         return EvaluatingAnatomyState()
 
-
+# this state is when the machine has been toggled to run through manual controls
+# currently done through keyboard inputs
+# NOT CURRENTLY FUNCTIONAL
 class ManualState(AbstractState):
     def __init__(self, oldState):
         self.currentServoX = oldState.currentServoX
