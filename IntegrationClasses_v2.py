@@ -145,9 +145,7 @@ class AimingState(AbstractState):
 
     def Execute(self, deltaTime):
         if self.iterations % 3 != 0 or True:
-            self.xSefrom adafruit_servokit import ServoKit
-import board
-from adafruit_pca9685 import PCA9685rvo.angle = self.goalServoX
+            self.xServo.angle = self.goalServoX
             self.yServo.angle = self.goalServoY
         self.iterations += 1
         sleep(self.waitTime)
