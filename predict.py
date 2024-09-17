@@ -61,10 +61,19 @@ class Prediction:
             time.sleep(max(delay_per_frame - difference, 0))
             
             # Read next frame
-            successful_frame_read, current_frame = video_capture.read()        
+            successful_frame_read, current_frame = video_capture.read()
+            
+    def print_names(model_file: str) -> None:
+        '''
+        Prints the names of the classes in a model file.
+        '''
+        model: YOLO = YOLO(model=model_file)
+        print(model.names)
         
 if __name__ == "__main__":
     Prediction.predict_video(
         model_file="runs/detect/train3/weights/best.pt",
         video_file="full_videos_for_prediction/000090258_001.mp4"
     )
+    
+    # Prediction.print_names(model_file="runs/detect/train3/weights/best.pt")
