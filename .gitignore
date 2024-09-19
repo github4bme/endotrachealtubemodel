@@ -1,2 +1,5 @@
 __pycache__/
 *.pyc
+*.cache
+# Ignore the output of the test script
+runs/detect/val*

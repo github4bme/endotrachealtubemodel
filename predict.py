@@ -7,7 +7,7 @@ import cv2
 from cv2 import VideoCapture
 from cv2.typing import MatLike
 import time
-
+from data_format_util import DataFormatUtil
 class Prediction:
     @staticmethod
     def predict_frame(model: YOLO, frame: MatLike) -> Annotator:
@@ -72,8 +72,8 @@ class Prediction:
         
 if __name__ == "__main__":
     Prediction.predict_video(
-        model_file="runs/detect/train3/weights/best.pt",
-        video_file="full_videos_for_prediction/000090258_001.mp4"
+        model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+        video_file=DataFormatUtil.video_for_prediction_file_path_from_video_name("000090258_001.mp4")
     )
     
     # Prediction.print_names(model_file="runs/detect/train3/weights/best.pt")
