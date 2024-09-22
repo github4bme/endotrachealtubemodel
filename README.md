@@ -6,7 +6,8 @@
 <li>
 <h4>train.py</h4>
 <div>
-TODO
+Trains a model based on a current version of a model
+and new data to add to its training data.
 </div>
 </li>
 
@@ -22,6 +23,8 @@ runs/detect/ called valN, where N is the next available number of run.
 <h4>predict.py</h4>
 <div>
 Runs the model through a video, predicting the locations of features in the video.
+There is the option to playback the video as it predicts, or save the predicted
+video to a new file in full_predicted_videos/
 </div>
 </li>
 

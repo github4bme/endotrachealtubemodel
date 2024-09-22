@@ -3,3 +3,8 @@ __pycache__/
 *.cache
 # Ignore the output of the test script
 runs/detect/val*
+# For now, ignore the output of the train script
+runs/detect/train*
+
+# Ignore mp4 video files
+*.mp4

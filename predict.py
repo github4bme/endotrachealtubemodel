@@ -8,9 +8,11 @@ from cv2 import VideoCapture
 from cv2.typing import MatLike
 import time
 from data_format_util import DataFormatUtil
+import os
+
 class Prediction:
     @staticmethod
-    def predict_frame(model: YOLO, frame: MatLike) -> Annotator:
+    def predict_frame(model: YOLO, frame: MatLike) -> MatLike:
         '''
         Predicts on a frame using a model.
         '''
@@ -22,10 +24,10 @@ class Prediction:
                 b: (torch.Tensor | np.ndarray) = box.xyxy[0]
                 c: (torch.Tensor | np.ndarray) = box.cls
                 annotator.box_label(b, model.names[int(c)] + " " + str(box.conf))
-        return annotator
+        return annotator.result()
     
     @staticmethod
-    def predict_video(model_file: str, video_file: str) -> None:
+    def predict_video_playback(model_file: str, video_file: str) -> None:
         '''
         Predicts on a video file using a model file.
         '''
@@ -44,10 +46,10 @@ class Prediction:
         previous_time: float = current_time
         while successful_frame_read:
             # Predict
-            annotator: Annotator = Prediction.predict_frame(model=model, frame=current_frame)
+            predicted_frame: MatLike = Prediction.predict_frame(model=model, frame=current_frame)
             
             # Display
-            cv2.imshow("frame", annotator.result())
+            cv2.imshow("frame", predicted_frame)
             
             # End video when press 'q'
             key: int = cv2.waitKey(1)
@@ -62,7 +64,51 @@ class Prediction:
             
             # Read next frame
             successful_frame_read, current_frame = video_capture.read()
+        
+    @staticmethod
+    def predict_video_save(model_file: str, video_file: str) -> None:
+        '''
+        Predicts on a video file using a model file and saves the result.
+        Assumes that the video file is in the format of a .mp4 file.
+        '''
+        model: YOLO = YOLO(model=model_file)
+        
+        video_capture: VideoCapture = VideoCapture(filename=video_file)
+        
+        base_file_name: str = os.path.basename(video_file)
+        output_file_name: str = DataFormatUtil.full_predicted_video_file_path_from_video_name(video_name=base_file_name)
+        
+        # Define the codec and create VideoWriter object
+        # for saving the video
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+        output = cv2.VideoWriter(
+            filename=output_file_name,
+            fourcc=fourcc,
+            fps=video_capture.get(cv2.CAP_PROP_FPS),
+            frameSize=(
+                int(video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)),
+                int(video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
+            )
+        )
+        if not output.isOpened():
+            print("Error opening output video file.")
+            return
+        
+        while video_capture.isOpened():
+            # Predict
+            successful_frame_read, frame = video_capture.read()
+            if not successful_frame_read:
+                break
+            predicted_frame: MatLike = Prediction.predict_frame(model=model, frame=frame)
             
+            # Save
+            output.write(predicted_frame)
+            
+        output.release()
+        video_capture.release()
+        cv2.destroyAllWindows()        
+            
+    @staticmethod
     def print_names(model_file: str) -> None:
         '''
         Prints the names of the classes in a model file.
@@ -71,7 +117,11 @@ class Prediction:
         print(model.names)
         
 if __name__ == "__main__":
-    Prediction.predict_video(
+    # Prediction.predict_video_playback(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     video_file=DataFormatUtil.video_for_prediction_file_path_from_video_name("000090258_001.mp4")
+    # )
+    Prediction.predict_video_save(
         model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
         video_file=DataFormatUtil.video_for_prediction_file_path_from_video_name("000090258_001.mp4")
     )

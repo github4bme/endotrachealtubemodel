@@ -19,3 +19,10 @@ class DataFormatUtil:
         Returns the video file path from a video name.
         '''
         return f"full_videos_for_prediction/{video_name}"
+    
+    @staticmethod
+    def full_predicted_video_file_path_from_video_name(video_name: str) -> str:
+        '''
+        Returns the full predicted video file path from a video name.
+        '''
+        return f"full_predicted_videos/{video_name}"
