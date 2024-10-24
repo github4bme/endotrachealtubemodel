@@ -5,6 +5,7 @@ __pycache__/
 runs/detect/val*
 # For now, ignore the output of the train script
 runs/detect/train*
+datasets_exported_from_cvat/
 
 # Ignore mp4 video files
 *.mp4

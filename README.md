@@ -42,4 +42,23 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 ```
 
 ### Instructions for preparing data for training
-TODO
+<ol>
+
+<li>
+Download the video you want to annotate from the google sheet titled
+"Video Annotation Progress".
+</li>
+
+<li>
+Upload the video to CVAT.
+</li>
+
+<li>
+Click to start a job.
+</li>
+
+<li>
+
+</li>
+
+</ol>
