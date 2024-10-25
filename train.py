@@ -33,7 +33,12 @@ if __name__ == "__main__":
     #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
     # )
     
-    Trainer.train_for_demo(
+    # Trainer.train_for_demo(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
+    # )
+    
+    Trainer.train(
         model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
     )

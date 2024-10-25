@@ -2,6 +2,7 @@ import cv2
 from cv2 import VideoCapture
 import os
 import random
+import yaml
 
 def convert_format_and_train_test_split(dataset_name: str) -> None:
     # Imortant constants
@@ -15,6 +16,16 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
     os.makedirs(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/training/labels", exist_ok=True)
     os.makedirs(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/validation/images", exist_ok=True)
     os.makedirs(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/validation/labels", exist_ok=True)
+    
+    # Write data.yaml file
+    data_yaml: dict = {
+        'train': './training/images',
+        'val': './validation/images',
+        'nc': 3,
+        'names': ['trachea', 'epiglottis', 'uvula']
+    }
+    with open(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/data.yaml", "w") as file:
+        yaml.dump(data_yaml, file, default_flow_style=None)
     
     # If frames are already in the target directories return
     if os.listdir(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/training/images") and os.listdir(f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/validation/images"):
@@ -63,12 +74,13 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
         # Save image
         cv2.imwrite(f"{output_directory}/images/scene{frame_number_string}.png", frame)
         
-        # frame_number: int = int(frame_file_name.split(".")[0])
-        # video_capture.set(1, frame_number)
-        # successful_frame_read, frame = video_capture.read()
-        # if not successful_frame_read:
-        #     break
-        # cv2.imwrite(f"{EXPORTED_DIRECTORY}/{dataset_name}/images/train/{frame_file_name}", frame)
+        # Save label
+        # Read from source label file
+        with open(f"{EXPORTED_DIRECTORY}/{dataset_name}/labels/train/{frame_file_name}", "r") as source_label_file:
+            source_label = source_label_file.read()
+            # Write to target label file
+            with open(f"{output_directory}/labels/scene{frame_number_string}.txt", "w") as target_label_file:
+                target_label_file.write(source_label)
 
 if __name__ == "__main__":
     convert_format_and_train_test_split(dataset_name="047217044_001")
