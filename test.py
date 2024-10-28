@@ -63,14 +63,24 @@ if __name__ == "__main__":
     #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
     # )
     
-    Tester.test_on_multiple_validation_datasets(
-        model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
-        dataset_files=[
-            DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001"),
-            DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
-        ]
-    )
+    # Tester.test_on_multiple_validation_datasets(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     dataset_files=[
+    #         DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001"),
+    #         DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
+    #     ]
+    # )
     
     # Tester.test_on_all_validation_datasets(
     #     model_file=DataFormatUtil.model_file_path_from_run_name("train3")
     # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
+    # )
+    
+    Tester.test(
+        model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
+    )

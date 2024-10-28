@@ -1,8 +1,7 @@
 __pycache__/
 *.pyc
 *.cache
-# Ignore the output of the test script
-runs/detect/val*
+
 datasets_exported_from_cvat/
 
 # Ignore mp4 video files
