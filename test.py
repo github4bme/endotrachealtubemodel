@@ -58,9 +58,35 @@ class Tester:
             print(validation_results)
         
 if __name__ == "__main__":
+    pass
     # Tester.test(
     #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
     #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
+    # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
+    # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset")
+    # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset")
+    # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("098513213_001")
+    # )
+    
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("098513213_001")
     # )
     
     # Tester.test_on_multiple_validation_datasets(
@@ -80,7 +106,7 @@ if __name__ == "__main__":
     #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
     # )
     
-    Tester.test(
-        model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
-    )
+    # Tester.test(
+    #     model_file=DataFormatUtil.model_file_path_from_run_name("train5"),
+    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
+    # )
