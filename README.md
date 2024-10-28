@@ -27,13 +27,12 @@ Model Training/Data History:
 | Date | New Trained Model Version | Additional Video(s) Trained On | Notes |
 | - | - | - | - |
 | Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A |
-| 10-25-2024 | runs/detect/train5/weights/best.pt | 047217044_001 | I ended this training after 20 epochs |
+Results saved to runs/detect/train32
 
 Model Testing History:
 | Date | Test Results Directory | Model File Tested | Dataset Tested On |
 | - | - | - | - |
-| 10-28-2024 | runs/detect/val11 | runs/detect/train3/weights/best.pt | 047217044_001 |
-| 10-28-2024 | runs/detect/val12 | runs/detect/train5/weights/best.pt | 047217044_001 |
+
 
 ### Instructions for preparing data for training using CVAT
 

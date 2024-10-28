@@ -12,7 +12,7 @@ class Trainer:
         number of run.
         '''
         model: YOLO = YOLO(model=model_file)
-        results = model.train(data=dataset_file)
+        results = model.train(data=dataset_file, epochs=11)
         print(results)
         
     def train_for_demo(model_file: str, dataset_file: str) -> None:
@@ -24,7 +24,7 @@ class Trainer:
         number of run.
         '''
         model: YOLO = YOLO(model=model_file)
-        results = model.train(data=dataset_file, epochs=5)
+        results = model.train(data=dataset_file, epochs=11)
         print(results)
     
 if __name__ == "__main__":
@@ -40,5 +40,5 @@ if __name__ == "__main__":
     
     Trainer.train(
         model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("047217044_001")
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("004080945_001")
     )
