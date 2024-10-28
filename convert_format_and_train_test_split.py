@@ -57,7 +57,7 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
                 y1 = int((y - height / 2) * frame.shape[0])
                 x2 = int((x + width / 2) * frame.shape[1])
                 y2 = int((y + height / 2) * frame.shape[0])
-                cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
+                # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         
         # # Display frame
         # cv2.imshow("frame", frame)
@@ -83,4 +83,4 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
                 target_label_file.write(source_label)
 
 if __name__ == "__main__":
-    convert_format_and_train_test_split(dataset_name="047217044_001")
+    convert_format_and_train_test_split(dataset_name="004080945_001")
