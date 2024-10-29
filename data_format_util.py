@@ -11,7 +11,7 @@ class DataFormatUtil:
         '''
         Returns the dataset file path from a dataset name.
         '''
-        return f"/Users/jakeyablok/EndotrachealTubeModel/datasets/{dataset_name}/data.yaml"
+        return f"datasets/{dataset_name}/data.yaml"
     
     @staticmethod
     def video_for_prediction_file_path_from_video_name(video_name: str) -> str:

@@ -58,9 +58,8 @@ class Tester:
             print(validation_results)
         
 if __name__ == "__main__":
-    pass
-    model_name = input("Please enter name of model to train on.\n")
-    dataset_name = input("Please enter name of new dataset to train on.\n")
+    model_name = input("Please enter name of model to test on.\n")
+    dataset_name = input("Please enter name of new dataset to test on.\n")
 
     Tester.test(
         model_file=DataFormatUtil.model_file_path_from_run_name(model_name),

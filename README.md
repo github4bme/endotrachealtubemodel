@@ -33,6 +33,8 @@ Model Training/Data History:
 Model Testing History:
 | Date | Test Results Directory | Model File Tested | Dataset Tested On |
 | - | - | - | - |
+| 10-28-2024 | run/detect/val14 | runs/detect/train3 | 004080945_001 |
+| 10-28-2024 | run/detect/val15 | runs/detect/train32 | 004080945_001 |
 
 
 ### Instructions for preparing data for training using CVAT
