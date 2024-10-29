@@ -28,17 +28,10 @@ class Trainer:
         print(results)
     
 if __name__ == "__main__":
-    # Trainer.train(
-    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
-    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
-    # )
-    
-    # Trainer.train_for_demo(
-    #     model_file=DataFormatUtil.model_file_path_from_run_name("train3"),
-    #     dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("testset2")
-    # )
-    
+    model_name = input("Please enter name of model to train on.\n")
+    dataset_name = input("Please enter name of new dataset to train on.\n")
+
     Trainer.train(
-        model_file=DataFormatUtil.model_file_path_from_run_name("train32"),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name("010878657_001")
+        model_file=DataFormatUtil.model_file_path_from_run_name(model_name),
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name(dataset_name)
     )
