@@ -6,3 +6,6 @@ datasets_exported_from_cvat/
 
 # Ignore mp4 video files
 *.mp4
+
+# Ignore .idea folder
+.idea/
