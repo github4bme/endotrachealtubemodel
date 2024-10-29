@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c61d7ef-4ff8-47f2-8323-2620b8ccaabb" name="Changes" comment="Added video and trained on it" />
+    <list default="true" id="1c61d7ef-4ff8-47f2-8323-2620b8ccaabb" name="Changes" comment="Added video and trained on it">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,6 +32,7 @@
     "Python.convert_format_and_train_test_split.executor": "Run",
     "Python.data_format_util.executor": "Run",
     "Python.predict.executor": "Run",
+    "Python.test.executor": "Run",
     "Python.train.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -59,6 +63,7 @@
       <workItem from="1730091193455" duration="2480000" />
       <workItem from="1730122319343" duration="12000" />
       <workItem from="1730122784808" duration="11310000" />
+      <workItem from="1730164960246" duration="325000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed formatting bug for annotation export">
       <option name="closed" value="true" />
@@ -88,6 +93,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="Added video and trained on it" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/EndotrachealTubeModel$test.coverage" NAME="test Coverage Results" MODIFIED="1730165261141" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/EndotrachealTubeModel$data_format_util.coverage" NAME="data_format_util Coverage Results" MODIFIED="1730092213243" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/EndotrachealTubeModel$predict.coverage" NAME="predict Coverage Results" MODIFIED="1730122329280" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/EndotrachealTubeModel$convert_format_and_train_test_split.coverage" NAME="convert_format_and_train_test_split Coverage Results" MODIFIED="1730150725488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
