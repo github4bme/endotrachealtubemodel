@@ -68,4 +68,5 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
         num_frames_covered += 1
 
 if __name__ == "__main__":
-    convert_format_and_train_test_split(dataset_name="047217044_001")
+    dataset = input("Enter the name of the dataset.\n")
+    convert_format_and_train_test_split(dataset_name=dataset)

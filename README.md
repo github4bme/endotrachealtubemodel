@@ -35,7 +35,8 @@ Model Testing History:
 | - | - | - | - |
 | 10-28-2024 | run/detect/val14 | runs/detect/train3 | 004080945_001 |
 | 10-28-2024 | run/detect/val15 | runs/detect/train32 | 004080945_001 |
-
+| 10-28-2024 | run/detect/val8 | runs/detect/train3 | 047217044_001 |
+| 10-28-2024 | run/detect/val9 | runs/detect/train33 | 047217044_001 |
 
 ### Instructions for preparing data for training using CVAT
 
