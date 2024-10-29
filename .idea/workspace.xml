@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c61d7ef-4ff8-47f2-8323-2620b8ccaabb" name="Changes" comment="Added video and trained on it">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
-    </list>
+    <list default="true" id="1c61d7ef-4ff8-47f2-8323-2620b8ccaabb" name="Changes" comment="Added video and trained on it" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +58,7 @@
       <updated>1730091192176</updated>
       <workItem from="1730091193455" duration="2480000" />
       <workItem from="1730122319343" duration="12000" />
-      <workItem from="1730122784808" duration="10631000" />
+      <workItem from="1730122784808" duration="11310000" />
     </task>
     <task id="LOCAL-00001" summary="Fixed formatting bug for annotation export">
       <option name="closed" value="true" />
