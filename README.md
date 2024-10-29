@@ -26,8 +26,9 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 Model Training/Data History:
 | Date | New Trained Model Version | Additional Video(s) Trained On | Notes |
 | - | - | - | - |
-| Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A |
-Results saved to runs/detect/train32
+| Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A | |
+| 10-28-2024 | runs/detect/train32 | 004080945_001 | 11 epochs |
+| 10-28-2024 | runs/detect/train33 | 010878657_001 | 11 epochs |
 
 Model Testing History:
 | Date | Test Results Directory | Model File Tested | Dataset Tested On |
