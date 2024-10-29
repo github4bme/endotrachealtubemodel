@@ -35,36 +35,19 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
     video_capture: VideoCapture = VideoCapture(filename=f"{EXPORTED_DIRECTORY}/{dataset_name}.mp4")
     frame_file_names: list[str] = os.listdir(f"{EXPORTED_DIRECTORY}/{dataset_name}/labels/train")
     
+    total_frames: int = len(frame_file_names)
+    num_frames_covered: int = 0
     # Iterate through each frame
     for frame_file_name in frame_file_names:
         # Get frame number
         frame_number_string: str = frame_file_name.removeprefix("frame_").removesuffix(".txt")
         frame_number: int = int(frame_number_string)
+        print(f"Processing frame {num_frames_covered}/{total_frames}")
         print(frame_number)
         
         # Get corresponding frame
         video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
-        ret, frame = video_capture.read()
-        
-        # Draw annotations on frame
-        with open(f"{EXPORTED_DIRECTORY}/{dataset_name}/labels/train/{frame_file_name}", "r") as file:
-            for line in file:
-                line = line.strip()
-                if not line:
-                    continue
-                class_id, x, y, width, height = map(float, line.split())
-                x1 = int((x - width / 2) * frame.shape[1])
-                y1 = int((y - height / 2) * frame.shape[0])
-                x2 = int((x + width / 2) * frame.shape[1])
-                y2 = int((y + height / 2) * frame.shape[0])
-                # cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        
-        # # Display frame
-        # cv2.imshow("frame", frame)
-        
-        # End video when press 'q'
-        if cv2.waitKey(1) & 0xFF == ord("q"):
-            break
+        _, frame = video_capture.read()
         
         # Get output directory based on random train-validation split
         random_number_from_zero_to_one: float = random.random()
@@ -81,6 +64,8 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
             # Write to target label file
             with open(f"{output_directory}/labels/scene{frame_number_string}.txt", "w") as target_label_file:
                 target_label_file.write(source_label)
+                
+        num_frames_covered += 1
 
 if __name__ == "__main__":
-    convert_format_and_train_test_split(dataset_name="010878657_001")
+    convert_format_and_train_test_split(dataset_name="047217044_001")
