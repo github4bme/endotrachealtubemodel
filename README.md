@@ -29,7 +29,7 @@ Model Training/Data History:
 | Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A | |
 | 10-28-2024 | runs/detect/train32 | 004080945_001 | 11 epochs |
 | 10-28-2024 | runs/detect/train33 | 010878657_001 | 11 epochs |
-| 11-14-2024 | runs/detect/train33 | 047217044_001 | 11 epochs |
+| 11-14-2024 | runs/detect/train36 | 047217044_001 | 11 epochs |
 
 
 Model Testing History:
