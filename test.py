@@ -1,10 +1,31 @@
 from ultralytics import YOLO
 from data_format_util import DataFormatUtil
+import csv
+import datetime
 import os
+import argparse
+
+def log_test_history(results_dir, model_name, dataset_name, csv_filename):
+    # Check if the CSV file exists
+    file_exists = os.path.isfile(csv_filename)
+    print(f"Logging test results for {model_name} with dataset {dataset_name} to {csv_filename}.")
+
+    # Open the CSV file in append mode
+    with open(csv_filename, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Write the header if the file is new
+        if not file_exists:
+            writer.writerow(['Results Directory', 'Model Version', 'Dataset tested on', 'Timestamp', 'Link'])
+        
+        # Write the new entry
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        results_dir_link = f'=HYPERLINK("./runs/detect/{results_dir}", "Link")'
+        writer.writerow([results_dir, model_name, dataset_name, timestamp, results_dir_link])
 
 class Tester:
     @staticmethod
-    def test(model_file: str, dataset_file: str) -> None:
+    def test(model_file: str, dataset_file: str, run_number: int) -> None:
         # '''
     #     Test a model on a dataset.
     #     This will output the validation results to
@@ -17,7 +38,7 @@ class Tester:
     #     datasets_dir: C:\Users\Declan O'Brien\Documents\Capstone\EndotrachealTubeModel
     #     '''
         model: YOLO = YOLO(model=model_file)
-        validation_results = model.val(data=dataset_file)
+        validation_results = model.val(data=dataset_file, project='runs/detect', name=f'val{run_number}')
         print(validation_results)
         
     @staticmethod
@@ -58,10 +79,15 @@ class Tester:
             print(validation_results)
         
 if __name__ == "__main__":
-    model_name = input("Please enter name of model to test on.\n")
-    dataset_name = input("Please enter name of new dataset to test on.\n")
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--model_name', type=str, help='Name of the model to test on.', required=True)
+    arg_parser.add_argument('--dataset_name', type=str, help='Name of the dataset to test on.', required=True)
+    arg_parser.add_argument('--run_number', type=int, help='The number of run (i.e, the N value in valN).', required=True)
+    args = arg_parser.parse_args()
 
     Tester.test(
-        model_file=DataFormatUtil.model_file_path_from_run_name(model_name),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name(dataset_name)
+        model_file=DataFormatUtil.model_file_path_from_run_name(args.model_name),
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name(args.dataset_name),
+        run_number=args.run_number
     )
+    log_test_history(f'val{args.run_number}', args.model_name, args.dataset_name, 'test_history.csv')
