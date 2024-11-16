@@ -1,0 +1,6 @@
+Results Directory,Model Version,Dataset tested on,Timestamp,Link
+val16,train36,combined_testset,2024-11-15 16:58:15,"=HYPERLINK(""./runs/detect/val16"", ""Link"")"
+val19,train32,combined_testset,2024-11-15 18:13:41,"=HYPERLINK(""./runs/detect/val19"", ""Link"")"
+val20,train39,combined_testset,2024-11-15 19:24:15,"=HYPERLINK(""./runs/detect/val20"", ""Link"")"
+val21,train39,010878657_001,2024-11-15 19:26:46,"=HYPERLINK(""./runs/detect/val21"", ""Link"")"
+val22,train39,004080945_001,2024-11-15 19:28:57,"=HYPERLINK(""./runs/detect/val22"", ""Link"")"

@@ -35,7 +35,11 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
     video_capture: VideoCapture = VideoCapture(filename=f"{EXPORTED_DIRECTORY}/{dataset_name}.mp4")
     frame_file_names: list[str] = os.listdir(f"{EXPORTED_DIRECTORY}/{dataset_name}/labels/train")
     
+    # Shuffle frame file names to randomize training-validation split
+    random.shuffle(frame_file_names)
+
     total_frames: int = len(frame_file_names)
+    frames_into_training: int = int(total_frames * TRAINING_PERCENTAGE)
     num_frames_covered: int = 0
     # Iterate through each frame
     for frame_file_name in frame_file_names:
@@ -49,9 +53,8 @@ def convert_format_and_train_test_split(dataset_name: str) -> None:
         video_capture.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
         _, frame = video_capture.read()
         
-        # Get output directory based on random train-validation split
-        random_number_from_zero_to_one: float = random.random()
-        training_or_validation: str = "training" if random_number_from_zero_to_one < TRAINING_PERCENTAGE else "validation"
+        # Get output directory based on train-validation split
+        training_or_validation: str = "training" if num_frames_covered < frames_into_training else "validation"
         output_directory: str = f"{TARGET_DATASET_DIRECTORY}/{dataset_name}/{training_or_validation}"
         
         # Save image
