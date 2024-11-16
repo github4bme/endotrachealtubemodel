@@ -1,9 +1,31 @@
 from ultralytics import YOLO
 from data_format_util import DataFormatUtil
+import csv
+import datetime
+import os
+import argparse
+
+def log_model_version(new_model_version, previous_model_version, dataset, csv_filename):
+    # Check if the CSV file exists
+    file_exists = os.path.isfile(csv_filename)
+    print(f"Logging model version {new_model_version} with dataset {dataset} to {csv_filename}.")
+
+    # Open the CSV file in append mode
+    with open(csv_filename, mode='a', newline='') as file:
+        writer = csv.writer(file)
+        
+        # Write the header if the file is new
+        if not file_exists:
+            writer.writerow(['New Model Version', 'Previous Model Version Trained On', 'Additional Dataset Trained On', 'Timestamp', 'Details'])
+        
+        # Write the new entry
+        timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        arg_file_link = f'=HYPERLINK("./runs/detect/{new_model_version}/args.yaml", "Link")'
+        writer.writerow([new_model_version, previous_model_version, dataset, timestamp, arg_file_link])
 
 class Trainer:
     @staticmethod
-    def train(model_file: str, dataset_file: str) -> None:
+    def train(model_file: str, dataset_file: str, run_number: int) -> None:
         '''
         Train a model on a dataset.
         This will output the training results to
@@ -12,7 +34,7 @@ class Trainer:
         number of run.
         '''
         model: YOLO = YOLO(model=model_file)
-        results = model.train(data=dataset_file, epochs=11)
+        results = model.train(data=dataset_file, epochs=11, project='runs/detect', name=f'train{run_number}')
         print(results)
         
     def train_for_demo(model_file: str, dataset_file: str) -> None:
@@ -28,10 +50,15 @@ class Trainer:
         print(results)
     
 if __name__ == "__main__":
-    model_name = input("Please enter name of model to train on.\n")
-    dataset_name = input("Please enter name of new dataset to train on.\n")
-
+    arg_parser = argparse.ArgumentParser()
+    arg_parser.add_argument('--model_name', type=str, help='Name of the model to train on.', required=True)
+    arg_parser.add_argument('--dataset_name', type=str, help='Name of the dataset to train on.', required=True)
+    arg_parser.add_argument('--run_number', type=int, help='The number of run (i.e, the N value in trainN).', required=True)
+    args = arg_parser.parse_args()
+    
     Trainer.train(
-        model_file=DataFormatUtil.model_file_path_from_run_name(model_name),
-        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name(dataset_name)
+        model_file=DataFormatUtil.model_file_path_from_run_name(args.model_name),
+        dataset_file=DataFormatUtil.dataset_file_path_from_dataset_name(args.dataset_name),
+        run_number=args.run_number
     )
+    log_model_version(new_model_version=f'train{args.run_number}', previous_model_version=args.model_name, dataset=args.dataset_name, csv_filename='model_versions.csv')
