@@ -10,6 +10,5 @@ datasets_exported_from_cvat/
 # Ignore .idea folder
 .idea/
 
-# Ignore symlinked files in combined testset
-datasets/combined_testset/validation/images/*
-datasets/combined_testset/validation/labels/*
+# Ignore .combined_dataset folder
+datasets/combined_dataset/

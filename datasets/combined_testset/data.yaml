@@ -1,5 +1,0 @@
-train: ./training/images
-val: ./validation/images
-
-nc: 3
-names: ['trachea', 'epiglottis', 'uvula']
