@@ -2,11 +2,11 @@ import os
 import argparse
 import yaml
 
-# Helper function to create symbolic links for images and labels in the validation set of a dataset
-def create_symlinks_with_prefix(datasets_dir: str, source_folder: str, target_folder: str, set_type: str, datatype: str) -> None:
+# Helper function to create symbolic links for images and labels in a dataset
+def create_symlinks_with_prefix(datasets_dir: str, source_folder: str, target_folder: str, data_split: str, datatype: str) -> None:
     # Get the paths to the source and target validation folders
-    source_path = os.path.join(datasets_dir, source_folder, set_type, datatype)
-    target_path = os.path.join(datasets_dir, target_folder, set_type, datatype)
+    source_path = os.path.join(datasets_dir, source_folder, data_split, datatype)
+    target_path = os.path.join(datasets_dir, target_folder, data_split, datatype)
     
     # Define a prefix based on the source folder name
     prefix = source_folder + '_'
@@ -76,15 +76,15 @@ if __name__ == '__main__':
         for source_folder in os.listdir(datasets_dir):
             if source_folder == target_folder:
                 continue
-            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, 'training', 'images')
-            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, 'training', 'labels')
-            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, 'validation', 'images')
-            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, 'validation', 'labels')
+            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='training', datatype='images')
+            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='training', datatype='labels')
+            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='validation', datatype='images')
+            create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='validation', datatype='labels')
     else:
-        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, 'training', 'images')
-        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, 'training', 'labels')
-        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, 'validation', 'images')
-        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, 'validation', 'labels')
+        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='training', datatype='images')
+        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='training', datatype='labels')
+        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='validation', datatype='images')
+        create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='validation', datatype='labels')
 
     '''
     # Inspect the validity of the symbolic links

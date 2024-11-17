@@ -2,3 +2,4 @@ New Model Version,Previous Model Version Trained On,Additional Dataset Trained O
 train37,train3,010878657_001,2024-11-15 18:45:28,"=HYPERLINK(""./runs/detect/train37/args.yaml"", ""Link"")"
 train38,train37,004080945_001,2024-11-15 19:19:31,"=HYPERLINK(""./runs/detect/train38/args.yaml"", ""Link"")"
 train39,train38,047217044_001,2024-11-15 19:22:56,"=HYPERLINK(""./runs/detect/train39/args.yaml"", ""Link"")"
+train40,train3,combined_dataset,2024-11-16 22:41:07,"=HYPERLINK(""./runs/detect/train40/args.yaml"", ""Link"")"
