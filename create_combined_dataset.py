@@ -21,6 +21,14 @@ def create_symlinks_with_prefix(datasets_dir: str, source_folder: str, target_fo
             else:
                 os.symlink(source_file_path, target_file_path)
                 print(f"Created symlink: {source_file_path} -> {target_file_path}")
+
+# Helper function to log the datasets contained in the combined dataset
+def log_datasets_contained(datasets_contained: list[str], yaml_file: str) -> None:
+    with open(yaml_file, 'r') as file:
+        data_yaml = yaml.load(file, Loader=yaml.FullLoader)
+    data_yaml['datasets_contained'] = datasets_contained
+    with open(yaml_file, 'w') as file:
+        yaml.dump(data_yaml, file, default_flow_style=None)
             
 # Helper function to inspect the validity of symbolic links in a directory
 def inspect_symlinks(directory):
@@ -72,19 +80,30 @@ if __name__ == '__main__':
     with open(os.path.join(datasets_dir, target_folder, 'data.yaml'), "w") as file:
         yaml.dump(data_yaml, file, default_flow_style=None)
 
+    datasets_contained = []
     if args.for_all:
+        # Clear all existing symbolic links
+        for root, dirs, files in os.walk(os.path.join(datasets_dir, target_folder)):
+            for file in files:
+                file_path = os.path.join(root, file)
+                if os.path.islink(file_path):
+                    os.remove(file_path)
+        # Create symbolic links for all datasets
         for source_folder in os.listdir(datasets_dir):
-            if source_folder == target_folder:
+            if source_folder == target_folder or not os.path.isdir(os.path.join(datasets_dir, source_folder)):
                 continue
             create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='training', datatype='images')
             create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='training', datatype='labels')
             create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='validation', datatype='images')
             create_symlinks_with_prefix(datasets_dir, source_folder, target_folder, data_split='validation', datatype='labels')
+            datasets_contained.append(source_folder)
     else:
         create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='training', datatype='images')
         create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='training', datatype='labels')
         create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='validation', datatype='images')
         create_symlinks_with_prefix(datasets_dir, args.source_folder, target_folder, data_split='validation', datatype='labels')
+        datasets_contained.append(args.source_folder)
+    log_datasets_contained(datasets_contained, os.path.join(datasets_dir, target_folder, 'data.yaml'))
 
     '''
     # Inspect the validity of the symbolic links

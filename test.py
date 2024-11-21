@@ -1,27 +1,34 @@
 from ultralytics import YOLO
 from data_format_util import DataFormatUtil
+import yaml
 import csv
 import datetime
 import os
 import argparse
 
-def log_test_history(results_dir, model_name, dataset_name, csv_filename):
-    # Check if the CSV file exists
-    file_exists = os.path.isfile(csv_filename)
-    print(f"Logging test results for {model_name} with dataset {dataset_name} to {csv_filename}.")
+def log_test_history(results_dir: str, model_version: str, dataset: str, csv_filename: str) -> None:
+    print(f"Logging test results for {model_version} with dataset {dataset} to {csv_filename}.")
+
+    # If the dataset is combined_dataset, log the individual datasets
+    if dataset == 'combined_dataset':
+        yaml_file = os.path.join('datasets', 'combined_dataset', 'data.yaml')
+        with open(yaml_file, 'r') as file:
+            data_yaml = yaml.load(file, Loader=yaml.FullLoader)
+        datasets_contained = data_yaml['datasets_contained']
+        dataset = f"Combined dataset containing [{', '.join(datasets_contained)}]"
 
     # Open the CSV file in append mode
     with open(csv_filename, mode='a', newline='') as file:
         writer = csv.writer(file)
         
         # Write the header if the file is new
-        if not file_exists:
+        if not os.path.isfile(csv_filename):
             writer.writerow(['Results Directory', 'Model Version', 'Dataset tested on', 'Timestamp', 'Link'])
         
         # Write the new entry
         timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         results_dir_link = f'=HYPERLINK("./runs/detect/{results_dir}", "Link")'
-        writer.writerow([results_dir, model_name, dataset_name, timestamp, results_dir_link])
+        writer.writerow([results_dir, model_version, dataset, timestamp, results_dir_link])
 
 class Tester:
     @staticmethod
@@ -30,8 +37,8 @@ class Tester:
     #     Test a model on a dataset.
     #     This will output the validation results to
     #     a new directory within runs/detect/
-    #     called valN, where N is the next available
-    #     number of run. Ensure that in your 
+    #     called valN, where N is the provided run_number.
+    #     . Ensure that in your 
     #     AppData/Roaming/Ultralytics/settings.yaml file,
     #     the datasets_dir ends with this main project repo,
     #     like this:
