@@ -45,7 +45,7 @@ class Tester:
     #     datasets_dir: C:\Users\Declan O'Brien\Documents\Capstone\EndotrachealTubeModel
     #     '''
         model: YOLO = YOLO(model=model_file)
-        validation_results = model.val(data=dataset_file, project='runs/detect', name=f'val{run_number}')
+        validation_results = model.val(data=dataset_file, project='runs/detect', name=f'val{run_number}', exist_ok=True)
         print(validation_results)
         
     @staticmethod

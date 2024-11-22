@@ -40,7 +40,7 @@ class Trainer:
         called trainN, where N is the provided run_number.
         '''
         model: YOLO = YOLO(model=model_file)
-        results = model.train(data=dataset_file, epochs=11, project='runs/detect', name=f'train{run_number}')
+        results = model.train(data=dataset_file, epochs=11, project='runs/detect', name=f'train{run_number}', exist_ok=True)
         print(results)
         
     def train_for_demo(model_file: str, dataset_file: str) -> None:

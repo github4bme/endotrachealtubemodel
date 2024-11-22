@@ -3,16 +3,101 @@
 ### Programs In This Project
 
 1. #### train.py
-    Trains a model based on a current version of a model and new data to add to its training data.
+    Trains a model based on a current version of a model and a specific dataset while maintaining a record of model versioning.
+
+    Usage:
+    ```bash
+    python train.py --model_name <model_name> --dataset_name <dataset_name> --run_number <run_number>
+    ```
+
+    Command-Line Arguments:
+    - `--model_name` (required):  
+    The folder name in the `runs/detect/` directory containing the model file to train on.  
+    Example: `train3`
+
+    - `--dataset_name` (required):  
+    The folder name in the `datasets/` directory containing the dataset to use for training.  
+    Example: `90258_001`
+
+    - `--run_number` (required):  
+    An integer representing the current training iteration. This is included in the version naming convention (`trainN`). The training results will be saved to a new folder within `runs/detect/` called `trainN`.  
+    Example: `4`
+
+    Logging:
+    After training, the script logs the details of the new model version into a CSV file named `model_versions.csv`.
 
 2. #### test.py
-    Validates the model, and outputs the result to a new directory within runs/detect/ called valN, where N is the next available number of run.
+    Validates the model on a specific dataset while maintaining a record of testing history.
+
+    Usage:
+    ```bash
+    python test.py --model_name <model_name> --dataset_name <dataset_name> --run_number <run_number>
+    ```
+
+    Command-Line Arguments:
+    - `--model_name` (required):  
+    The folder name in the runs/detect/ directory containing the model file to test.  
+    Example: `train3`
+
+    - `--dataset_name` (required):  
+    The folder name in the datasets/ directory containing the dataset to use for testing.  
+    Example: `90258_001`
+    - `--run_number` (required):  
+    An integer representing the current testing iteration. This is included in the testing naming convention (valN). The testing results will be saved to a new folder within runs/detect/ called valN.  
+    Example: `1`
+
+    Logging: After testing, the script logs the details of the test run into a CSV file named `test_history.csv`.
 
 3. #### predict.py
     Runs the model through a video, predicting the locations of features in the video. There is the option to playback the video as it predicts, or save the predicted video to a new file in full_predicted_videos/.
 
 4. #### convert_format_and_train_test_split.py
     Converts the data format from the downloaded CVAT annotations to the format we need.
+
+5. #### create_combined_dataset.py
+    Combines multiple datasets into a single dataset folder (`combined_dataset`) by creating symbolic links to their images and labels. It also generates a `data.yaml` configuration file for YOLOv8 training or validation.  (Due to YOLOv8's potential inability to resolve relative paths in symbolic links, the script uses absolute paths, and the symbolic links are ignored by `.gitignore` to account for machine-specific file paths. You need to recreate them on different machines by re-running the script.)
+
+    Usage:
+    - Combine All Datasets
+    ```bash
+    python create_combined_dataset.py --for_all
+    ```
+    - Add a Specific Dataset
+    ```bash
+    python create_combined_dataset.py --source_folder <source_folder>
+    ```
+
+    Command-Line Arguments:
+    - `--for_all`:  
+    Combine all datasets within the `datasets/` directory into `combined_dataset`. When using `--for_all`, the script removes all existing symbolic links in combined_dataset before recreating them.
+    
+    - `--source_folder <source_folder>`:  
+    Add a single dataset (specified by folder name) to the `combined_dataset` incrementally without affecting existing links.  
+    Example: `098513213_001`
+
+    **Note**: Either `--for_all` or `--source_folder` must be provided, but not both.
+
+    Output Structure: 
+    The script creates the following directory structure in `datasets/combined_dataset/`:
+    ```css
+    combined_dataset/
+    ├── training/
+    │   ├── images/ (symbolic links to images for training from all source datasets)
+    │   ├── labels/ (symbolic links to labels for training from all source datasets)
+    ├── validation/
+    │   ├── images/ (symbolic links to images for validation from all source datasets)
+    │   ├── labels/ (symbolic links to labels for validation from all source datasets)
+    ├── data.yaml
+    ```
+    The `data.yaml` file is generated with the following format:
+    ```yaml
+    datasets_contained: [all source datasets. e.g.: 90258_001, 098513213_001]
+    train: ./training/images
+    val: ./validation/images
+    nc: 3
+    names: ['trachea', 'epiglottis', 'uvula']
+    ```
+
 
 ### Model Notes
 As of 9-16-24, the value of 
