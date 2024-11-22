@@ -36,14 +36,14 @@
 
     Command-Line Arguments:
     - `--model_name` (required):  
-    The folder name in the runs/detect/ directory containing the model file to test.  
+    The folder name in the `runs/detect/` directory containing the model file to test.  
     Example: `train3`
 
     - `--dataset_name` (required):  
-    The folder name in the datasets/ directory containing the dataset to use for testing.  
+    The folder name in the `datasets/` directory containing the dataset to use for testing.  
     Example: `90258_001`
     - `--run_number` (required):  
-    An integer representing the current testing iteration. This is included in the testing naming convention (valN). The testing results will be saved to a new folder within runs/detect/ called valN.  
+    An integer representing the current testing iteration. This is included in the testing naming convention (`valN`). The testing results will be saved to a new folder within `runs/detect/` called `valN`.  
     Example: `1`
 
     Logging: After testing, the script logs the details of the test run into a CSV file named `test_history.csv`.
@@ -71,7 +71,7 @@
     - `--for_all`:  
     Combine all datasets within the `datasets/` directory into `combined_dataset`. When using `--for_all`, the script removes all existing symbolic links in combined_dataset before recreating them.
     
-    - `--source_folder <source_folder>`:  
+    - `--source_folder`:  
     Add a single dataset (specified by folder name) to the `combined_dataset` incrementally without affecting existing links.  
     Example: `098513213_001`
 
