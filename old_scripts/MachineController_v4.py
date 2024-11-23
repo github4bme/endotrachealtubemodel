@@ -4,27 +4,43 @@ from ultralytics.utils.plotting import Annotator
 from gpiozero import DigitalOutputDevice, Servo
 import time
 import cv2
-from adafruit_servokit import ServoKit
-import board
+try:
+    from adafruit_servokit import ServoKit
+    import board
+except:
+    print("Adafruit ServoKit not found. Servo control will not be available.")
 from adafruit_pca9685 import PCA9685
 
 #deepsparse: https://docs.ultralytics.com/integrations/neural-magic/
 
 # create the servos that will be controlled
-kit = ServoKit(channels=16)
-servo1 = kit.servo[0]
-servo2 = kit.servo[1]
+servo1 = None
+servo2 = None
+try:
+    kit = ServoKit(channels=16)
+    servo1 = kit.servo[0]
+    servo2 = kit.servo[1]
+except:
+    print("Adafruit ServoKit not found. Servo control will not be available.")
 
 def start_execution():
     # load most recent model
-    model = YOLO("runs/detect/train3/weights/best.pt")
+    # model = YOLO("runs/detect/train3/weights/best.pt")
+    # model = YOLO("../runs/detect/train3/weights/best.pt")
+    model = YOLO("../runs/detect/train40/weights/best.pt")
 
     # set servo angles to middle (arm pointing straight down)
-    servo1.angle = 90
-    servo2.angle = 90
+    if servo1 is not None:
+        servo1.angle = 90
+    if servo2 is not None:
+        servo2.angle = 90
 
     # set up camera frame capture
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0) # Uncomment this line if using webcam
+    # cap = cv2.VideoCapture("../full_videos_for_prediction/000090258_001.mp4")
+    cap = cv2.VideoCapture("../datasets_exported_from_cvat/047217044_001.mp4")
+    # Set frame number to start from as 1000
+    cap.set(cv2.CAP_PROP_POS_FRAMES, 1000)
     cap.set(3, 640)  # set Width
     cap.set(4, 480)  # set Height
     lastFrameTime = None

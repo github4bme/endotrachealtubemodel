@@ -4,6 +4,10 @@ from ultralytics.utils.plotting import Annotator
 from time import sleep
 import pygame
 import cv2
+import pyautogui
+
+# Get screen dimensions
+screen_width, screen_height = pyautogui.size()
 
 # abstract class each state will implement
 class AbstractState(ABC):
@@ -77,7 +81,16 @@ class EvaluatingAnatomyState(AbstractState):
                 b = box.xyxy[0]  # get box coordinates in (left, top, right, bottom) format
                 c = box.cls
                 annotator.box_label(b, self.model.names[int(c)] + " " + str(box.conf))
-        cv2.imshow('frame', annotator.result())
+        
+        # Resize the frame to fit the screen
+        h, w, _ = frame.shape
+        scale = min(screen_width / w, screen_height / h)  # Calculate the scaling factor
+        new_width = int(w * scale)
+        new_height = int(h * scale)
+        resized_frame = cv2.resize(annotator.result(), (new_width, new_height))
+        
+        # Display the resized frame
+        cv2.imshow('frame', resized_frame)
 
         # get the normalized bounding box locations to analyze anatomy positions during frame
         # currently only reacts to tracheas (box.cls == 0)
@@ -158,8 +171,10 @@ class AimingState(AbstractState):
         return ManualState(self)
 
     def Execute(self, deltaTime):
-        self.xServo.angle = self.goalServoX
-        self.yServo.angle = self.goalServoY
+        if self.xServo is not None:
+            self.xServo.angle = self.goalServoX
+        if self.yServo is not None:
+            self.yServo.angle = self.goalServoY
         sleep(self.waitTime)
         return EvaluatingAnatomyState(self)
 
@@ -253,7 +268,9 @@ class ManualState(AbstractState):
             targetY = 0
         self.currentServoX = targetX
         self.currentServoY = targetY
-        self.xServo.angle = targetX
-        self.yServo.angle = targetY
+        if self.xServo is not None:
+            self.xServo.angle = targetX
+        if self.yServo is not None:
+            self.yServo.angle = targetY
         sleep(self.waitTime)
         return self
