@@ -1,0 +1,4 @@
+names: [trachea, epiglottis, uvula]
+nc: 3
+train: ./training/images
+val: ./validation/images
