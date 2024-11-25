@@ -142,6 +142,7 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 
     When working on this project in CVAT, make sure you are in the correct organization, not "Personal Workspace" or another organization.
 
+
 2. Create a new project within this organization. When creating the project, be sure to add the labels: ['trachea', 'epiglottis', 'uvula']. It's important to ensure the order is consistent with the class label numbers (trachea = 0, etc.).
 
     ![CVAT project creation 1](images/cvat_project_creation_1.png)
@@ -150,10 +151,12 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 3. Download the video you want to annotate from the google sheet titled
 ["Video Annotation Progress"](https://docs.google.com/spreadsheets/d/1T86gqUQacowGvsDeFqO6eBcgxWp41lqLjR3G9PPORe8/edit?usp=sharing).
 
+
 4. Navigate to this project and create a new task for each video you want to annotate. Upload the desired video to this task.
 
     ![CVAT task creation 1](images/cvat_task_creation_1.png)
     ![CVAT task creation 1](images/cvat_task_creation_2.png)
+
 
 5. Within the task, click the job.
 
@@ -170,19 +173,23 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 
     ![CVAT annotation 2](images/cvat_annotation_2.png)
 
+
 7. When you are finished annotating, return back to the job. Click export annotations.
 
     ![Export annotation 1](images/export_annotation_1.png)
+
 
 8. Select "YOLOv8 Detection 1.0" for Export Format and name the dataset the same as the video name. Download the zip.
 
     ![Export annotation 2](images/export_annotation_2.png)
 
-9. Extract the contents of the zip and place it in this repo in the folder: datasets_exported_from_cvat/ along with the source video file. There is a paywall to export the images along with the labels from CVAT so we need to extract them from the video.
+
+9. Extract the contents of the zip and place it in this repo in the folder: `datasets_exported_from_cvat/` along with the source video file. There is a paywall to export the images along with the labels from CVAT so we need to extract them from the video.
 
     ![Export annotation 3](images/export_annotation_3.png)
 
-10. Run convert_format_and_train_test_split.py with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
+
+10. Run `convert_format_and_train_test_split.py` with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
 
     ![Convert format](images/convert_format.png)
 ### Training and Testing History
