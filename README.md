@@ -133,22 +133,6 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 ```
 {0: 'trachea', 1: 'epiglottis', 2: 'uvula'}
 ```
-Model Training/Data History:
-| Date | New Trained Model Version | Additional Video(s) Trained On | Notes |
-| - | - | - | - |
-| Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A | |
-| 10-28-2024 | runs/detect/train32 | 004080945_001 | 11 epochs |
-| 10-28-2024 | runs/detect/train33 | 010878657_001 | 11 epochs |
-| 11-14-2024 | runs/detect/train36 | 047217044_001 | 11 epochs |
-
-
-Model Testing History:
-| Date | Test Results Directory | Model File Tested | Dataset Tested On |
-| - | - | - | - |
-| 10-28-2024 | run/detect/val14 | runs/detect/train3 | 004080945_001 |
-| 10-28-2024 | run/detect/val15 | runs/detect/train32 | 004080945_001 |
-| 10-28-2024 | run/detect/val8 | runs/detect/train3 | 047217044_001 |
-| 10-28-2024 | run/detect/val9 | runs/detect/train33 | 047217044_001 |
 
 ### Instructions for preparing data for training using CVAT
 
@@ -201,3 +185,10 @@ Model Testing History:
 10. Run convert_format_and_train_test_split.py with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
 
     ![Convert format](images/convert_format.png)
+### Training and Testing History
+
+##### Training History
+- `model_versions.csv` is automatically updated with the newly trained models after running `train.py`. This contains the model version name, the previous model trained on, the additional dataset trained on, timestamp, and file path.
+
+##### Testing History
+ - `test_history.csv` is automatically updated with the history of tests after running `test.py`. This contains the the results directory, model version tested, dataset tested on, timestamp, and file path.
