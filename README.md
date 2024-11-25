@@ -176,3 +176,11 @@ Model Testing History:
 10. Run convert_format_and_train_test_split.py with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
 
     ![Convert format](images/convert_format.png)
+
+### Training and Testing History
+
+##### Training History
+- `model_versions.csv` is automatically updated with the newly trained models after running `train.py`. This contains the model version name, the previous model trained on, the additional dataset trained on, timestamp, and file path.
+
+##### Testing History
+ - `test_history.csv` is automatically updated with the history of tests after running `test.py`. This contains the the results directory, model version tested, dataset tested on, timestamp, and file path.
