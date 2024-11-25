@@ -1,5 +1,28 @@
 # Machine Learning Integrated to Endotracheal Tube Insertion
 
+### Installation of This Project
+1. #### Install Dependencies
+    ##### Project dependencies
+    ```bash
+    pip install -r requirements.txt
+    ```
+    ##### Devtool dependencies
+    ```bash
+    pip install -r dev-requirements.txt
+    ```
+    ##### If you change the imports used in the project, to update the requirements.txt file:
+    ```bash
+    pipreqs . --force
+    ```
+2. #### Set up environment variables
+    Ensure that in your AppData/Roaming/Ultralytics/settings.yaml file,
+    the value of the datasets_dir ends with this main project repo, like this:
+    datasets_dir: C:\Users\Declan O'Brien\Documents\Capstone\EndotrachealTubeModel
+
+    ![Environment Variables 1](images/environment_variables_1.png)
+
+    Troubleshooting: If this doesn't work, you can change the path values in data_format_util.py to be absolute paths instead of relative paths.
+
 ### Programs In This Project
 
 1. #### train.py
