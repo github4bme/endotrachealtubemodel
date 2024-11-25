@@ -1,7 +1,9 @@
 # Machine Learning Integrated to Endotracheal Tube Insertion
 
 ### Installation of This Project
-1. #### Install Dependencies
+1. #### Moving large files
+    When using git commands (add, commit, push, pull, fetch, clone, etc) with large changes (datasets, model files), it is recommended break up into multiple commits and to use --verbose to track the progress because it usually takes a long time.
+2. #### Install Dependencies
     ##### Project dependencies
     ```bash
     pip install -r requirements.txt
@@ -14,7 +16,7 @@
     ```bash
     pipreqs . --force
     ```
-2. #### Set up environment variables
+3. #### Set up environment variables
     Ensure that in your AppData/Roaming/Ultralytics/settings.yaml file,
     the value of the datasets_dir ends with this main project repo, like this:
     datasets_dir: C:\Users\Declan O'Brien\Documents\Capstone\EndotrachealTubeModel
@@ -131,7 +133,22 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 ```
 {0: 'trachea', 1: 'epiglottis', 2: 'uvula'}
 ```
+Model Training/Data History:
+| Date | New Trained Model Version | Additional Video(s) Trained On | Notes |
+| - | - | - | - |
+| Start of Autumn 2024 semester | runs/detect/train3/weights/best.pt | N/A | |
+| 10-28-2024 | runs/detect/train32 | 004080945_001 | 11 epochs |
+| 10-28-2024 | runs/detect/train33 | 010878657_001 | 11 epochs |
+| 11-14-2024 | runs/detect/train36 | 047217044_001 | 11 epochs |
 
+
+Model Testing History:
+| Date | Test Results Directory | Model File Tested | Dataset Tested On |
+| - | - | - | - |
+| 10-28-2024 | run/detect/val14 | runs/detect/train3 | 004080945_001 |
+| 10-28-2024 | run/detect/val15 | runs/detect/train32 | 004080945_001 |
+| 10-28-2024 | run/detect/val8 | runs/detect/train3 | 047217044_001 |
+| 10-28-2024 | run/detect/val9 | runs/detect/train33 | 047217044_001 |
 
 ### Instructions for preparing data for training using CVAT
 
@@ -177,18 +194,10 @@ from the most recent model (runs/detect/train3/weights/best.pt) is:
 
     ![Export annotation 2](images/export_annotation_2.png)
 
-9. Extract the contents of the zip and place it in this repo in the folder: `datasets_exported_from_cvat/` along with the source video file. There is a paywall to export the images along with the labels from CVAT so we need to extract them from the video.
+9. Extract the contents of the zip and place it in this repo in the folder: datasets_exported_from_cvat/ along with the source video file. There is a paywall to export the images along with the labels from CVAT so we need to extract them from the video.
 
     ![Export annotation 3](images/export_annotation_3.png)
 
-10. Run `convert_format_and_train_test_split.py` with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
+10. Run convert_format_and_train_test_split.py with the correct dataset name. After running this, the dataset should be ready to further train a previous model version.
 
     ![Convert format](images/convert_format.png)
-
-### Training and Testing History
-
-##### Training History
-- `model_versions.csv` is automatically updated with the newly trained models after running `train.py`. This contains the model version name, the previous model trained on, the additional dataset trained on, timestamp, and file path.
-
-##### Testing History
- - `test_history.csv` is automatically updated with the history of tests after running `test.py`. This contains the the results directory, model version tested, dataset tested on, timestamp, and file path.
