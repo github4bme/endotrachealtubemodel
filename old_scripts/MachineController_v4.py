@@ -27,7 +27,7 @@ def start_execution():
     # load most recent model
     # model = YOLO("runs/detect/train3/weights/best.pt")
     # model = YOLO("../runs/detect/train3/weights/best.pt")
-    model = YOLO("../runs/detect/train40/weights/best.pt")
+    model = YOLO("../runs/detect/train41/weights/best.pt")
 
     # set servo angles to middle (arm pointing straight down)
     if servo1 is not None:
