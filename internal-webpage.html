@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Integrated to Endotracheal Tube Insertion</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        
+        pre {
+            background-color: #f6f8fa;
+            padding: 16px;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+        
+        code {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            background-color: #f6f8fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #24292e;
+            margin-top: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .command-block {
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+        
+        .note {
+            background-color: #fff8dc;
+            padding: 16px;
+            border-left: 4px solid #ffeb3b;
+            margin: 16px 0;
+        }
+        
+        ol {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .table-of-contents {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        
+        .table-of-contents ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .table-of-contents a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        
+        .table-of-contents a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Add smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Add padding to section headers to account for fixed navigation */
+        section {
+            scroll-margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-of-contents">
+        <h2>Table of Contents</h2>
+        <ul>
+            <li><a href="#installation">Installation of This Project</a></li>
+            <li><a href="#programs">Programs In This Project</a></li>
+            <li><a href="#model-notes">Model Notes</a></li>
+            <li><a href="#cvat-instructions">Instructions for preparing data for training using CVAT</a></li>
+            <li><a href="#history">Training and Testing History</a></li>
+        </ul>
+    </div>
+
+    <h1>Machine Learning Integrated to Endotracheal Tube Insertion</h1>
+
+    <section id="installation">
+        <h2>Installation of This Project</h2>
+        <ol>
+            <li>
+                <h3>Moving large files</h3>
+                <p>When using git commands (add, commit, push, pull, fetch, clone, etc) with large changes (datasets, model files), it is recommended break up into multiple commits and to use --verbose to track the progress because it usually takes a long time.</p>
+            </li>
+            <li>
+                <h3>Install Dependencies</h3>
+                <h4>Project dependencies</h4>
+                <pre><code>pip install -r requirements.txt</code></pre>
+                
+                <h4>Devtool dependencies</h4>
+                <pre><code>pip install -r dev-requirements.txt</code></pre>
+                
+                <h4>If you change the imports used in the project, to update the requirements.txt file:</h4>
+                <pre><code>pipreqs . --force</code></pre>
+            </li>
+            <li>
+                <h3>Set up environment variables</h3>
+                <p>Ensure that in your AppData/Roaming/Ultralytics/settings.yaml file,
+                the value of the datasets_dir ends with this main project repo, like this:
+                datasets_dir: C:\Users\Declan O'Brien\Documents\Capstone\EndotrachealTubeModel</p>
+                
+                <img src="images/environment_variables_1.png" alt="Environment Variables 1">
+                
+                <div class="note">
+                    <strong>Troubleshooting:</strong> If this doesn't work, you can change the path values in data_format_util.py to be absolute paths instead of relative paths.
+                </div>
+            </li>
+        </ol>
+    </section>
+
+    <section id="programs">
+        <h2>Programs In This Project</h2>
+        <!-- Each program section -->
+        <section>
+            <h3>1. train.py</h3>
+            <p>Trains a model based on a current version of a model and a specific dataset while maintaining a record of model versioning.</p>
+            
+            <h4>Usage:</h4>
+            <pre><code>python train.py --model_name &lt;model_name&gt; --dataset_name &lt;dataset_name&gt; --run_number &lt;run_number&gt;</code></pre>
+            
+            <!-- Continue with all programs... -->
+        </section>
+
+        <section>
+            <h3>2. test.py</h3>
+            <p>Validates the model on a specific dataset while maintaining a record of testing history.</p>
+            
+            <h4>Usage:</h4>
+            <pre><code>python test.py --model_name &lt;model_name&gt; --dataset_name &lt;dataset_name&gt; --run_number &lt;run_number&gt;</code></pre>
+            
+            <h4>Command-Line Arguments:</h4>
+            <ul>
+                <li><code>--model_name</code> (required):<br>
+                    The folder name in the <code>runs/detect/</code> directory containing the model file to test.<br>
+                    Example: <code>train3</code></li>
+                <li><code>--dataset_name</code> (required):<br>
+                    The folder name in the <code>datasets/</code> directory containing the dataset to use for testing.<br>
+                    Example: <code>90258_001</code></li>
+                <li><code>--run_number</code> (required):<br>
+                    An integer representing the current testing iteration. This is included in the testing naming convention (<code>valN</code>).<br>
+                    Example: <code>1</code></li>
+            </ul>
+            
+            <p><strong>Logging:</strong> After testing, the script logs the details of the test run into a CSV file named <code>test_history.csv</code>.</p>
+        </section>
+
+        <section>
+            <h3>3. predict.py</h3>
+            <p>Runs the model through a video, predicting the locations of features in the video. There is the option to playback the video as it predicts, or save the predicted video to a new file in full_predicted_videos/.</p>
+        </section>
+
+        <section>
+            <h3>4. convert_format_and_train_test_split.py</h3>
+            <p>Converts the data format from the downloaded CVAT annotations to the format we need.</p>
+        </section>
+
+        <section>
+            <h3>5. create_combined_dataset.py</h3>
+            <p>Combines multiple datasets into a single dataset folder (<code>combined_dataset</code>) by creating symbolic links to their images and labels. It also generates a <code>data.yaml</code> configuration file for YOLOv8 training or validation.</p>
+            
+            <div class="note">
+                Due to YOLOv8's potential inability to resolve relative paths in symbolic links, the script uses absolute paths, and the symbolic links are ignored by <code>.gitignore</code> to account for machine-specific file paths. You need to recreate them on different machines by re-running the script.
+            </div>
+
+            <h4>Usage:</h4>
+            <p>Combine All Datasets:</p>
+            <pre><code>python create_combined_dataset.py --for_all</code></pre>
+            
+            <p>Add a Specific Dataset:</p>
+            <pre><code>python create_combined_dataset.py --source_folder &lt;source_folder&gt;</code></pre>
+
+            <h4>Output Structure:</h4>
+            <pre><code>combined_dataset/
+├── training/
+│   ├── images/ (symbolic links to images for training from all source datasets)
+│   ├── labels/ (symbolic links to labels for training from all source datasets)
+├── validation/
+│   ├── images/ (symbolic links to images for validation from all source datasets)
+│   ├── labels/ (symbolic links to labels for validation from all source datasets)
+├── data.yaml</code></pre>
+        </section>
+    </section>
+
+    <section id="model-notes">
+        <h2>Model Notes</h2>
+        <p>As of 9-16-24, the value of <code>model.names</code> from the most recent model (runs/detect/train3/weights/best.pt) is:</p>
+        <pre><code>{0: 'trachea', 1: 'epiglottis', 2: 'uvula'}</code></pre>
+    </section>
+
+    <section id="cvat-instructions">
+        <h2>Instructions for preparing data for training using CVAT</h2>
+        <ol>
+            <li>
+                <p>Create an account and organization on CVAT:</p>
+                <img src="images/cvat_org_creation.png" alt="CVAT org creation">
+                <p>When working on this project in CVAT, make sure you are in the correct organization, not "Personal Workspace" or another organization.</p>
+            </li>
+            <li>
+                <p>Create a new project within this organization. When creating the project, be sure to add the labels: ['trachea', 'epiglottis', 'uvula']. It's important to ensure the order is consistent with the class label numbers (trachea = 0, etc.).</p>
+                <img src="images/cvat_project_creation_1.png" alt="CVAT project creation 1">
+                <img src="images/cvat_project_creation_2.png" alt="CVAT project creation 2">
+            </li>
+            <li>
+                <p>Download the video you want to annotate from the google sheet titled <a href="https://docs.google.com/spreadsheets/d/1T86gqUQacowGvsDeFqO6eBcgxWp41lqLjR3G9PPORe8/edit?usp=sharing">"Video Annotation Progress"</a>.</p>
+            </li>
+            <!-- Continue with remaining CVAT instructions... -->
+        </ol>
+    </section>
+
+    <section id="history">
+        <h2>Training and Testing History</h2>
+        <h4>Training History</h4>
+        <p><code>model_versions.csv</code> is automatically updated with the newly trained models after running <code>train.py</code>. This contains the model version name, the previous model trained on, the additional dataset trained on, timestamp, and file path.</p>
+
+        <h4>Testing History</h4>
+        <p><code>test_history.csv</code> is automatically updated with the history of tests after running <code>test.py</code>. This contains the results directory, model version tested, dataset tested on, timestamp, and file path.</p>
+    </section>
+
+    <section id="prerequisites">
+        <h2>Prerequisites</h2>
+        <ul>
+            <li>Python 3.8 or higher</li>
+            <li>Git installed</li>
+            <li>CUDA-capable GPU (recommended for training)</li>
+            <li>Access to CVAT account and organization</li>
+        </ul>
+    </section>
+
+    <section id="project-structure">
+        <h2>Project Structure</h2>
+        <pre><code>EndotrachealTubeModel/
+├── datasets/                  # Training and testing datasets
+├── datasets_exported_from_cvat/ # Raw exports from CVAT
+├── runs/                      # Training and testing results
+│   └── detect/
+│       ├── train1/
+│       ├── train2/
+│       └── val1/
+├── full_predicted_videos/     # Output from predict.py
+├── images/                    # Documentation images
+├── train.py
+├── test.py
+├── predict.py
+├── convert_format_and_train_test_split.py
+├── create_combined_dataset.py
+├── requirements.txt
+└── dev-requirements.txt</code></pre>
+    </section>
+
+    <section id="troubleshooting">
+        <h2>Troubleshooting</h2>
+        
+        <h3>Common Issues</h3>
+        <div class="note">
+            <h4>CUDA Out of Memory</h4>
+            <p>If you encounter CUDA out of memory errors during training:</p>
+            <ul>
+                <li>Reduce batch size in training configuration</li>
+                <li>Use a smaller image size</li>
+                <li>Free up GPU memory from other applications</li>
+            </ul>
+        </div>
+        
+        <div class="note">
+            <h4>Symbolic Link Issues</h4>
+            <p>If combined dataset creation fails:</p>
+            <ul>
+                <li>Ensure you have appropriate permissions</li>
+                <li>Try running the script with administrator privileges</li>
+                <li>Check that source datasets exist in the correct location</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="version-history">
+        <h2>Version History</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Version</th>
+                    <th>Date</th>
+                    <th>Major Changes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1.0</td>
+                    <td>9-16-24</td>
+                    <td>Initial release with trachea, epiglottis, and uvula detection</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section id="contact">
+        <h2>Contact & Support</h2>
+        <p>For questions or issues related to this project:</p>
+        <ul>
+            <li>Submit issues on the project repository</li>
+            <li>Contact the project maintainers</li>
+            <li>Refer to the project documentation</li>
+        </ul>
+    </section>
+
+</body>
+</html>
